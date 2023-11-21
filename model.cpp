@@ -253,7 +253,6 @@ void UpdateModel(void)
 		g_Model.g_moveModel.z -= cosf(/*pCamera->rot.y -*/ g_Model.DestRot.y) * MODEL_SPEED;
 	}
 	
-	
 #endif
 
 	//ˆÊ’u‚ğXV
