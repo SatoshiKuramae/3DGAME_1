@@ -1,7 +1,7 @@
 #include "main.h"
 #include "polygon.h"
 #include "wall.h"
-#define NUM_POLYGON (1)
+#define NUM_POLYGON (4)
 //ÉOÉçÅ[ÉoÉãïœêî
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffWall = NULL;
 LPDIRECT3DTEXTURE9 g_pTextureWall = NULL;

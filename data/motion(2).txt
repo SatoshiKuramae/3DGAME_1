@@ -1,0 +1,118 @@
+#==============================================================================
+#
+# 『モーションビューワ』スクリプトファイル [motion.txt]
+# Author : AKIRA TANAKA
+#
+#==============================================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------------------------
+# キャラクター情報
+#------------------------------------------------------------------------------
+	CHARACTERSET
+		INDEX = 0					# 胸
+		PARENT = -1					# (親)NULL
+		POS = 0.0 20.0 0.0
+		ROT = 0.0 0.0 0.0
+		END_PARTSSET
+		
+	CHARACTERSET
+		INDEX = 1					# 腹
+		PARENT = 0					# (親)NULL
+		POS = 0.0 0.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+
+	CHARACTERSET
+		INDEX = 2					# 頭
+		PARENT = 0					# (親)胸
+		POS = 0.0 17.0 -22.0
+		ROT = 0.0 0.1 0.0
+	END_PARTSSET
+
+	CHARACTERSET
+		INDEX = 3					# 左上腕
+		PARENT = 0				# (親)体
+		POS = 35.0 25.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+	
+	CHARACTERSET
+		INDEX = 4					# 左腕
+		PARENT = 3				# 左上腕
+		POS = 1000.0 0.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+
+	CHARACTERSET
+		INDEX = 5					# 左手
+		PARENT = 4					# (左腕)
+		POS = 30.0 0.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+
+	CHARACTERSET
+		INDEX = 6					# 右上腕
+		PARENT = 0				# (親)胸
+		POS = -35.0 25.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+
+	CHARACTERSET
+		INDEX = 7					# 右腕
+		PARENT = 6					# (親)右上腕
+		POS = -38.0 0.0 1.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+	
+	
+	CHARACTERSET
+		INDEX = 8					# 右手
+		PARENT = 7					# (親)右上腕
+		POS = -30.0 0.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+
+	CHARACTERSET
+		INDEX = 9					# 右腿
+		PARENT = 1					# (親)腹
+		POS = -13.0 -20.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+
+	CHARACTERSET
+		INDEX = 10					# 右脛
+		PARENT = 9					# (親)右腿
+		POS = -0.5 -25.0 -1.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+
+	CHARACTERSET
+		INDEX = 11					# 右足
+		PARENT = 10					# (親)脛
+		POS = 0.5 -34.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+
+	CHARACTERSET
+		INDEX = 12					# 左腿
+		PARENT = 1					# (親)腹
+		POS = 13.0 -20.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+	
+	CHARACTERSET
+		INDEX = 13					# 左脛
+		PARENT = 12					# (親)左腿
+		POS = 0.5 -25.0 -1.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+	
+	CHARACTERSET
+		INDEX = 14					# 左足
+		PARENT = 13					# (親)左脛
+		POS = 0.5 -34.0 0.0
+		ROT = 0.0 0.0 0.0
+	END_PARTSSET
+	
+END_SCRIPT

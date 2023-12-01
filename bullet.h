@@ -20,4 +20,4 @@ void InitBullet(void);
 void UninitBullet(void);
 void UpdateBullet(void);
 void DrawBullet(void);
-void SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 rot, int nLife);
+void SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nLife);

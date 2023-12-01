@@ -13,6 +13,7 @@ typedef struct
 	D3DXMATRIX ModelmtxWorld;
 	D3DXVECTOR3 pos;
 	D3DXVECTOR3 rot;
+	int nIdxParts; //何番目のパーツか
 	int nIdxModelParent;	//親モデルのインデックス
 }ModelParts;
 

@@ -10,14 +10,14 @@
 #include "field.h"
 #include "wall.h"
 #include "camera.h"
-#include "model.h"
+#include "Player.h"
 #include "light.h"
 #include "input.h"
 #include "shadow.h"
 #include "billboard.h"
 #include "bullet.h"
 #include "meshfield.h"
-#include "model.h"
+
 
 #define MAX_NUM			(256)
 #define CLASS_NAME		"WindowClass"			//ウィンドウクラスの名前
@@ -31,7 +31,7 @@ HRESULT Init(HINSTANCE hinstance, HWND hWnd, BOOL bWindow);
 LPD3DXFONT g_pFont = NULL;
 int g_nCountFPS = 0;
 float pCamera;
-
+bool meshuse;
 //グローバル変数
 LPDIRECT3D9 g_pD3D = NULL;  //DirectXオブジェクトへのポインタ
 LPDIRECT3DDEVICE9 g_pD3DDevice = NULL; //Direct3Dデバイスへのポインタ
@@ -99,7 +99,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 	{//初期化処理が失敗した場合
 		return-1;
 	}
-	
+
 
 	//分解能を設定
 	timeBeginPeriod(1);
@@ -172,6 +172,7 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	D3DDISPLAYMODE d3ddm;	//ディスプレイモード
 	D3DPRESENT_PARAMETERS d3dpp;	//プレゼンテーションパラメータ
 
+	meshuse = false;
 	//DirectXオブジェクトの生成
 	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 	if (g_pD3D == NULL)
@@ -229,6 +230,7 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
 
 
+
 	//デバッグ表示用フォントの生成
 	D3DXCreateFont(g_pD3DDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &g_pFont);
 
@@ -236,7 +238,7 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	InitCamera();
 	//各種オブジェクトの初期化処理
 	InitPolygon();
-	InitModel();
+	InitPlayer();
 	Initmeshfield();
 	InitBillboard();
 	InitShadow();
@@ -265,7 +267,7 @@ void Uninit(void)
 	UninitWall();
 	UninitLight();
 	UninitBullet();
-	UninitModel();
+	UninitPlayer();
 	UninitShadow();
 	UninitKeyboard();
 	//Direct3Dデバイスのの破棄
@@ -294,7 +296,7 @@ void Update(void)
 	//各種オブジェクトのの更新処理
 	UpdatePolygon();
 	UpdateShadow();
-	UpdateModel();
+	UpdatePlayer();
 	Updatemeshfield();
 	UpdateBillboard();
 	UpdateBullet();
@@ -303,6 +305,25 @@ void Update(void)
 	UpdateField();
 	UpdateCamera();
 	UpdateKeyboard();
+	if (GetKeyboardTrigger(DIK_F1) == true)
+	{
+		if (meshuse == false)
+		{
+			meshuse = true;
+		}
+		else
+		{
+			meshuse = false;
+		}
+	}
+	if (meshuse == true)
+	{
+		g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	}
+	else
+	{
+		g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	}
 }
 
 //描画処理
@@ -323,10 +344,10 @@ void Draw(void)
 		DrawField();
 		DrawBillboard();
 		DrawWall();
-		DrawModel();
+		DrawPlayer();
 		DrawBullet();
 		DrawShadow();
-		
+
 		//描画終了
 		g_pD3DDevice->EndScene();
 	}
@@ -394,11 +415,12 @@ void DrawFPS(void)
 {
 	RECT rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
 	char aStr[2][256];
-	D3DXVECTOR3 modelrot = GetModelrot();
-	MODEL* pModel = GetModel();
+	D3DXVECTOR3 Playerrot = GetPlayerrot();
+	Player* pPlayer = GetPlayer();
+	Camera* pCamera = GetCamera();
 	//文字列に代入
-	snprintf(&aStr[0][0],256, "FPS:%d\n視点の移動　Z、C\nプレイヤーの向き:%.2f,%.2f,%.2f\n目的の向き:%.2f", g_nCountFPS,pModel->g_rotModel.x, pModel->g_rotModel.y, pModel->g_rotModel.z,pModel->DestRot.y);
-	
+	snprintf(&aStr[0][0], 256, "FPS:%d\n視点の移動　Z、C\nプレイヤーの向き:%.2f,%.2f,%.2f\n目的の向き:%.2f\n視点の角度:%.2f", g_nCountFPS, pPlayer->g_rotplayer.x, ((pPlayer->g_rotplayer.y) / D3DX_PI), pPlayer->g_rotplayer.z, pPlayer->DestRot.y, pCamera->rot.y);
+
 
 	//テキストの描画
 	g_pFont->DrawText(NULL, &aStr[0][0], -1, &rect, DT_LEFT, D3DCOLOR_RGBA(255, 255, 255, 255));

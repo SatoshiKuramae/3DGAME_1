@@ -54,7 +54,7 @@ void Initmeshfield(void)
 	pVtx[1].pos = (D3DXVECTOR3(0.0f, 10.0f, 50.0f));
 	pVtx[2].pos = (D3DXVECTOR3(50.0f, 10.0f, 50.0f));
 	pVtx[3].pos = (D3DXVECTOR3(-50.0f, 10.0f, 0.0f));
-	pVtx[4].pos = (D3DXVECTOR3(0.0f, 100.0f, 0.0f));
+	pVtx[4].pos = (D3DXVECTOR3(0.0f, 10.0f, 0.0f));
 	pVtx[5].pos = (D3DXVECTOR3(50.0f, 10.0f, 0.0f));
 	pVtx[6].pos = (D3DXVECTOR3(-50.0f, 10.0f, -50.0f));
 	pVtx[7].pos = (D3DXVECTOR3(0.0f, 10.0f, -50.0f));
@@ -68,7 +68,7 @@ void Initmeshfield(void)
 	pVtx[5].tex = (D3DXVECTOR2(1.0f, 0.5f));
 	pVtx[6].tex = (D3DXVECTOR2(0.0f, 1.0f));
 	pVtx[7].tex = (D3DXVECTOR2(0.5f, 1.0f));
-	pVtx[8].tex = (D3DXVECTOR2(1.0f, 0.0f));
+	pVtx[8].tex = (D3DXVECTOR2(1.0f, 1.0f));
 
 	//法線ベクトルの設定
 	pVtx[0].nor = D3DXVECTOR3(0.0f, 1.0f, 1.0f);

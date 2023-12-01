@@ -1,13 +1,13 @@
 #include "main.h"
 #include "Bullet.h"
-#include "model.h"
+#include "Player.h"
 #include "shadow.h"
 #define NUM_BULLET (1000)
 //グローバル変数
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffBullet = NULL;		//頂点バッファへのポインタ
 LPDIRECT3DTEXTURE9 g_pTextureBullet = NULL;
 Bullet g_Bullet[NUM_BULLET];
-int g_nldxShadow_Bullet = -1;
+int g_nldxShadow_Bullet = -2;
 
 //初期化処理
 void InitBullet(void)
@@ -89,7 +89,7 @@ void UninitBullet(void)
 //更新処理
 void UpdateBullet(void)
 {
-	MODEL* pModel = GetModel();
+	Player* pPlayer = GetPlayer();
 	for (int nCnt = 0; nCnt < NUM_BULLET; nCnt++)
 	{
 		SetPositionShadow(g_nldxShadow_Bullet, g_Bullet[nCnt].g_posBullet);
@@ -116,9 +116,9 @@ void DrawBullet(void)
 	D3DXMATRIX mtxView;
 
 	//アルファテストを有効
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE,TRUE);
-	pDevice->SetRenderState(D3DRS_ALPHAREF,0);
-	pDevice->SetRenderState(D3DRS_ALPHAFUNC,D3DCMP_GREATER);
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
 	for (int nCnt = 0; nCnt < NUM_BULLET; nCnt++)
 	{
@@ -168,18 +168,17 @@ void DrawBullet(void)
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
-void SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 rot, int nLife)
+void SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nLife)
 {
 	int nCntBullet;
-	
 
 	for (nCntBullet = 0; nCntBullet < NUM_BULLET; nCntBullet++)
 	{
 		if (g_Bullet[nCntBullet].bUse == false)
 		{
 			g_Bullet[nCntBullet].g_posBullet = pos;
-			g_Bullet[nCntBullet].moveBullet = move;
-			g_Bullet[nCntBullet].rotBullet = rot;
+			g_Bullet[nCntBullet].moveBullet.x = cosf(rot.y - (D3DX_PI * 0.5f)) * 5.0f;
+			g_Bullet[nCntBullet].moveBullet.z = sinf(rot.y - (D3DX_PI * 0.5f)) * 5.0f;
 			g_Bullet[nCntBullet].nLife = 100;
 			g_Bullet[nCntBullet].bUse = true;		//使用している状態にする
 

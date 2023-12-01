@@ -12,7 +12,7 @@
 #define DEFROT_MOD (0.3f)
 #define MOVEROT_MOD	(0.1f)
 #define player_SPEED (2.0f)
-
+#define PARTS_FILE	"data\\motion(2).txt"
 
 static const char* ModelFile[NUM_MODEL] =
 {
@@ -81,7 +81,6 @@ bool g_rolling;
 //初期化処理
 void InitPlayer(void)
 {
-	LoadPlayer();
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 
 	//各種変数の初期化
@@ -92,6 +91,8 @@ void InitPlayer(void)
 	g_player.g_moveplayer = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	g_rolling = false;
 	g_nldxShadow = SetShadow();
+
+	//LoadPlayer();
 
 	for (int nCnt = 0; nCnt < NUM_MODEL; nCnt++)
 	{
@@ -448,39 +449,84 @@ void DrawPlayer(void)
 
 void LoadPlayer(void)
 {
-	//char aDataSearch[NUM_MODEL];	//データ検索用
-	//FILE* pFile = fopen("data\\motion.txt", "r");
+	int nCnt = 0;		//現在のデータ
 
-	//if (pFile == NULL)
-	//{//ファイルが開けなかったら処理を終了する
-	//	return;
-	//}
+	char aDataSearch[1000];	//データ検索用
+	char aSymbol[4];		// =用
 
-	//while (1)
-	//{//ENDが見つかるまで続ける
-	//	fscanf(pFile, "%s", aDataSearch);	//検索
+	FILE* pFile = fopen(PARTS_FILE, "r");
 
-	//	if (!strcmp(aDataSearch, "END_SCRIPT"))
-	//	{//読み込み終了
-	//		fclose(pFile);
-	//		break;
-	//	}
-	//	if (aDataSearch[0] == '#')
-	//	{//繰り返す
-	//		continue;
-	//	}
+	if (pFile == NULL)
+	{//ファイルが開けなかったら処理を終了する
+		return;
+	}
 
-	//	if (!strcmp(aDataSearch, "CHARACTERSET"))
-	//	{
-	//		//項目ごとにデータを代入
-	//		while (1)
-	//		{
+	while (1)
+	{//ENDが見つかるまで続ける
+		fscanf(pFile, "%s", aDataSearch);	//検索
 
+		if (!strcmp(aDataSearch, "END_SCRIPT"))
+		{//読み込み終了
+			fclose(pFile);
+			break;
+		}
+		if (aDataSearch[0] == '#')
+		{//繰り返す
+			continue;
+		}
 
-	//		}
-	//	}
-	//}
+		if (!strcmp(aDataSearch, "CHARACTERSET"))
+		{
+			//項目ごとにデータを代入
+			while (1)
+			{
+
+				fscanf(pFile, "%s", aDataSearch);
+
+				if (aDataSearch[0] == '#')
+				{//繰り返す
+					continue;
+				}
+
+				if (!strcmp(aDataSearch, "END_PARTSSET"))
+				{
+					break;
+				}
+				else if (!strcmp(aDataSearch, "INDEX"))
+				{
+					fscanf(pFile, "%s,%d",
+						&aSymbol[0],
+						&g_player.aModel[nCnt].nIdxParts);
+				}
+				else if (!strcmp(aDataSearch, "PARENT"))
+				{
+					fscanf(pFile, "%s,%d", 
+						&aSymbol[0],
+						&g_player.aModel[nCnt].nIdxModelParent);
+				}
+				else if (!strcmp(aDataSearch, "POS"))
+				{
+					fscanf(pFile, "%s %f %f %f",
+						&aSymbol[0],
+						&g_player.aModel[nCnt].pos.x,
+						&g_player.aModel[nCnt].pos.y,
+						&g_player.aModel[nCnt].pos.z);
+				}
+				else if (!strcmp(aDataSearch, "ROT"))
+				{
+					fscanf(pFile, "%s,%f,%f,%f", 
+						&aSymbol[0],
+						&g_player.aModel[nCnt].rot.x, 
+						&g_player.aModel[nCnt].rot.y,
+						&g_player.aModel[nCnt].rot.z);
+				}
+			}
+			nCnt++;
+		}
+	}
 }
+
+
 Player* GetPlayer(void)
 {
 	return &g_player;

@@ -6,7 +6,7 @@
 
 #include "camera.h"
 #include "main.h"
-#include "model.h"
+#include "Player.h"
 #include "input.h"
 
 #define CAMERASPEED (1.0f)
@@ -47,7 +47,7 @@ void UninitCamera(void)
 //更新処理
 void UpdateCamera(void)
 {
-	MODEL* pModel = GetModel();
+	Player* pPlayer = GetPlayer();
 	if (GetKeyboardTrigger(DIK_RETURN) == true)
 	{
 		if (g_camera.flattery == false)
@@ -59,9 +59,9 @@ void UpdateCamera(void)
 			g_camera.flattery = false;
 		}
 	}
-	
+
 	//posR=注視点posV=視点vecU=視点のベクトル
-	
+
 	//視点の移動
 	if (GetKeyboardpress(DIK_C) == true)
 	{
@@ -86,6 +86,16 @@ void UpdateCamera(void)
 	{
 		g_camera.rot.x -= 0.1f;
 		g_camera.posV.y -= 1.0f;
+	}
+
+	//回転の補正
+	if (g_camera.rot.y > D3DX_PI)
+	{
+		g_camera.rot.y = -D3DX_PI;
+	}
+	else if (g_camera.rot.y < -D3DX_PI)
+	{
+		g_camera.rot.y = D3DX_PI;
 	}
 
 	//注視点までの距離を変える
@@ -122,21 +132,22 @@ void UpdateCamera(void)
 		g_camera.posV.x -= CAMERASPEED;
 		g_camera.posR.x -= CAMERASPEED;
 	}
-	if (GetKeyboardTrigger(DIK_RETURN) == true)
+	if (GetKeyboardTrigger(DIK_O) == true)
 	{
 		if (g_camera.flattery == true)
 		{
 			g_camera.flattery = false;
-			InitCamera();
 		}
-		else
+		else if (g_camera.flattery == false)
 		{
 			g_camera.flattery = true;
 		}
 	}
 	if (g_camera.flattery == true)
 	{
-		g_camera.posR = pModel->g_posModel;
+		g_camera.posR = pPlayer->g_posplayer;
+		g_camera.posV.x = sinf(g_camera.rot.y + D3DX_PI) * sqrtf(g_PosV_z * g_PosV_z + g_PosV_y * g_PosV_y) / 2 + pPlayer->g_posplayer.x;
+		g_camera.posV.z = cosf(g_camera.rot.y + D3DX_PI) * sqrtf(g_PosV_z * g_PosV_z + g_PosV_y * g_PosV_y) / 2 + pPlayer->g_posplayer.z;
 	}
 }
 
