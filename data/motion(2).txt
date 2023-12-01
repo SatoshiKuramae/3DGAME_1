@@ -12,7 +12,7 @@ SCRIPT			# この行は絶対消さないこと！
 	CHARACTERSET
 		INDEX = 0					# 胸
 		PARENT = -1					# (親)NULL
-		POS = 0.0 20.0 0.0
+		POS = 0.0 0.0 0.0
 		ROT = 0.0 0.0 0.0
 		END_PARTSSET
 		
@@ -40,7 +40,7 @@ SCRIPT			# この行は絶対消さないこと！
 	CHARACTERSET
 		INDEX = 4					# 左腕
 		PARENT = 3				# 左上腕
-		POS = 1000.0 0.0 0.0
+		POS = 38.0 0.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 

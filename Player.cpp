@@ -32,44 +32,44 @@ static const char* ModelFile[NUM_MODEL] =
 	"data\\MODEL\\L_leg2.x",
 	"data\\MODEL\\L_foot.x",
 };
-
-int OYAindex[NUM_MODEL]
-{
-	-1,
-	0,
-	0,
-	0,
-	3,
-	4,
-	0,
-	6,
-	7,
-	1,
-	9,
-	10,
-	1,
-	12,
-	13,
-};
-
-D3DXVECTOR3 modelpos[NUM_MODEL]
-{
-	D3DXVECTOR3(0.0f,0.0f,0.0f),
-	D3DXVECTOR3(0.0f,0.0f,0.0f),
-	D3DXVECTOR3(0.0f,18.0f,-23.0f),
-	D3DXVECTOR3(30.0f,25.0f,0.0f),
-	D3DXVECTOR3(38.0f,0.0f,0.0f),
-	D3DXVECTOR3(37.0f,0.0f,0.0f),
-	D3DXVECTOR3(-30.0f,25.0f,0.0f),
-	D3DXVECTOR3(-38.0f,0.0f,0.0f),
-	D3DXVECTOR3(-37.0f,0.0f,0.0f),
-	D3DXVECTOR3(-13.0f,-22.0f,0.0f),
-	D3DXVECTOR3(0.0f,-28.0f,0.0f),
-	D3DXVECTOR3(0.0f,-35.0f,0.0f),
-	D3DXVECTOR3(13.0f,-22.0f,0.0f),
-	D3DXVECTOR3(0.0f,-28.0f,0.0f),
-	D3DXVECTOR3(0.5f,-35.0f,0.0f)
-};
+//
+//int OYAindex[NUM_MODEL]
+//{
+//	-1,
+//	0,
+//	0,
+//	0,
+//	3,
+//	4,
+//	0,
+//	6,
+//	7,
+//	1,
+//	9,
+//	10,
+//	1,
+//	12,
+//	13,
+//};
+//
+//D3DXVECTOR3 modelpos[NUM_MODEL]
+//{
+//	D3DXVECTOR3(0.0f,0.0f,0.0f),
+//	D3DXVECTOR3(0.0f,0.0f,0.0f),
+//	D3DXVECTOR3(0.0f,18.0f,-23.0f),
+//	D3DXVECTOR3(30.0f,25.0f,0.0f),
+//	D3DXVECTOR3(38.0f,0.0f,0.0f),
+//	D3DXVECTOR3(37.0f,0.0f,0.0f),
+//	D3DXVECTOR3(-30.0f,25.0f,0.0f),
+//	D3DXVECTOR3(-38.0f,0.0f,0.0f),
+//	D3DXVECTOR3(-37.0f,0.0f,0.0f),
+//	D3DXVECTOR3(-13.0f,-22.0f,0.0f),
+//	D3DXVECTOR3(0.0f,-28.0f,0.0f),
+//	D3DXVECTOR3(0.0f,-35.0f,0.0f),
+//	D3DXVECTOR3(13.0f,-22.0f,0.0f),
+//	D3DXVECTOR3(0.0f,-28.0f,0.0f),
+//	D3DXVECTOR3(0.5f,-35.0f,0.0f)
+//};
 
 //ÉOÉçÅ[ÉoÉãïœêî
 int g_nldxShadow = -1;
@@ -92,14 +92,14 @@ void InitPlayer(void)
 	g_rolling = false;
 	g_nldxShadow = SetShadow();
 
-	//LoadPlayer();
+	LoadPlayer();
 
-	for (int nCnt = 0; nCnt < NUM_MODEL; nCnt++)
+	/*for (int nCnt = 0; nCnt < NUM_MODEL; nCnt++)
 	{
 		g_player.aModel[nCnt].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		g_player.aModel[nCnt].nIdxModelParent = OYAindex[nCnt];
 		g_player.aModel[nCnt].pos = modelpos[nCnt];
-	}
+	}*/
 
 	for (int nCnt = 0; nCnt < NUM_MODEL; nCnt++)
 	{
@@ -494,13 +494,13 @@ void LoadPlayer(void)
 				}
 				else if (!strcmp(aDataSearch, "INDEX"))
 				{
-					fscanf(pFile, "%s,%d",
+					fscanf(pFile, "%s %d",
 						&aSymbol[0],
 						&g_player.aModel[nCnt].nIdxParts);
 				}
 				else if (!strcmp(aDataSearch, "PARENT"))
 				{
-					fscanf(pFile, "%s,%d", 
+					fscanf(pFile, "%s %d", 
 						&aSymbol[0],
 						&g_player.aModel[nCnt].nIdxModelParent);
 				}
@@ -514,7 +514,7 @@ void LoadPlayer(void)
 				}
 				else if (!strcmp(aDataSearch, "ROT"))
 				{
-					fscanf(pFile, "%s,%f,%f,%f", 
+					fscanf(pFile, "%s %f %f %f", 
 						&aSymbol[0],
 						&g_player.aModel[nCnt].rot.x, 
 						&g_player.aModel[nCnt].rot.y,
