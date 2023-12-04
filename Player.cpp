@@ -12,7 +12,7 @@
 #define DEFROT_MOD (0.3f)
 #define MOVEROT_MOD	(0.1f)
 #define player_SPEED (2.0f)
-#define PARTS_FILE	"data\\motion(2).txt"
+#define PARTS_FILE	"data\\motion.txt"
 
 static const char* ModelFile[NUM_MODEL] =
 {
@@ -86,13 +86,15 @@ void InitPlayer(void)
 	//各種変数の初期化
 	//g_dwNumMatplayer = 0;
 	g_player.g_oldposplayer = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	g_player.g_posplayer = D3DXVECTOR3(0.0f, 100.0f, 0.0f);
+	g_player.g_posplayer = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	g_player.g_rotplayer = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	g_player.g_moveplayer = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	g_rolling = false;
 	g_nldxShadow = SetShadow();
 
 	LoadPlayer();
+
+	g_player.g_posplayer = D3DXVECTOR3(g_player.aModel[0].HEIGHT, g_player.aModel[0].HEIGHT, g_player.aModel[0].HEIGHT);
 
 	/*for (int nCnt = 0; nCnt < NUM_MODEL; nCnt++)
 	{
@@ -347,8 +349,8 @@ void UpdatePlayer(void)
 
 	if (bMove == true)
 	{
-		g_player.g_moveplayer.x -= sinf(D3DX_PI - g_player.DestRot.y) * player_SPEED;
-		g_player.g_moveplayer.z += cosf(D3DX_PI - g_player.DestRot.y) * player_SPEED;
+		g_player.g_moveplayer.x -= sinf(D3DX_PI - g_player.DestRot.y) * g_player.aModel[0].MOVE;
+		g_player.g_moveplayer.z += cosf(D3DX_PI - g_player.DestRot.y) * g_player.aModel[0].MOVE;
 	}
 
 #endif
@@ -463,6 +465,7 @@ void LoadPlayer(void)
 
 	while (1)
 	{//ENDが見つかるまで続ける
+
 		fscanf(pFile, "%s", aDataSearch);	//検索
 
 		if (!strcmp(aDataSearch, "END_SCRIPT"))
@@ -475,12 +478,69 @@ void LoadPlayer(void)
 			continue;
 		}
 
+		if (!strcmp(aDataSearch, "NUM_MODEL"))
+		{
+			fscanf(pFile, "%s %d",
+				&aSymbol[0],
+				&g_player.aModel[nCnt].MODEL_NUM);
+		}
 		if (!strcmp(aDataSearch, "CHARACTERSET"))
+		{
+			while (1)
+			{
+				fscanf(pFile, "%s", aDataSearch);
+				if (aDataSearch[0] == '#')
+				{//繰り返す
+					continue;
+				}
+				if (!strcmp(aDataSearch, "PARTSSET"))
+				{
+					break;
+				}
+				else if (!strcmp(aDataSearch, "NUM_PARTS"))
+				{
+					fscanf(pFile, "%s %d",
+						&aSymbol[0],
+						&g_player.aModel[nCnt].NUM_PARTS);
+				}
+				else if (!strcmp(aDataSearch, "MOVE"))
+				{
+					/*fscanf(pFile, "%s %f",
+						&aSymbol[0],
+						&g_player.aModel[nCnt].MOVE);*/
+
+					fscanf(pFile, "%s",
+						&aSymbol[0]
+						);
+
+					fscanf(pFile, "%f",
+						&g_player.aModel[nCnt].MOVE);
+				}
+				else if (!strcmp(aDataSearch, "JUMP"))
+				{
+					fscanf(pFile, "%s %f",
+						&aSymbol[0],
+						&g_player.aModel[nCnt].JUMP);
+				}
+				else if (!strcmp(aDataSearch, "RADIUS"))
+				{
+					fscanf(pFile, "%s %f",
+						&aSymbol[0],
+						&g_player.aModel[nCnt].RADIUS);
+				}
+				else if (!strcmp(aDataSearch, "HEIGHT"))
+				{
+					fscanf(pFile, "%s %d",
+						&aSymbol[0],
+						&g_player.aModel[nCnt].HEIGHT);
+				}
+			}
+		}
+		if (!strcmp(aDataSearch, "PARTSSET"))
 		{
 			//項目ごとにデータを代入
 			while (1)
 			{
-
 				fscanf(pFile, "%s", aDataSearch);
 
 				if (aDataSearch[0] == '#')
@@ -500,7 +560,7 @@ void LoadPlayer(void)
 				}
 				else if (!strcmp(aDataSearch, "PARENT"))
 				{
-					fscanf(pFile, "%s %d", 
+					fscanf(pFile, "%s %d",
 						&aSymbol[0],
 						&g_player.aModel[nCnt].nIdxModelParent);
 				}
@@ -514,9 +574,9 @@ void LoadPlayer(void)
 				}
 				else if (!strcmp(aDataSearch, "ROT"))
 				{
-					fscanf(pFile, "%s %f %f %f", 
+					fscanf(pFile, "%s %f %f %f",
 						&aSymbol[0],
-						&g_player.aModel[nCnt].rot.x, 
+						&g_player.aModel[nCnt].rot.x,
 						&g_player.aModel[nCnt].rot.y,
 						&g_player.aModel[nCnt].rot.z);
 				}

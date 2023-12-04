@@ -3,10 +3,26 @@
 #include "main.h"
 #define NUM_MODEL (15)
 
-;
+
+enum PLAYERSTATE
+{
+	PLAYERSTATE_NEUTRAL = 0,	//通常状態
+	PLAYERSTATE_ACTION,
+	PLAYERSTATE_MOVE,
+	PLAYERSTATE_JUMP,
+	PLAYERSTATE_LANDING,
+	PLAYERSTATE_MAX
+};
+
 //モデルの構造体
 typedef struct
 {
+	int MODEL_NUM;
+	int NUM_PARTS;	//パーツ数
+	float MOVE;		//移動量
+	float JUMP;		//ジャンプ量
+	float RADIUS;	//半径
+	float HEIGHT;	//高さ
 	LPD3DXMESH pMesh;
 	LPD3DXBUFFER pBuffMat;
 	DWORD nNumMat;
@@ -29,6 +45,8 @@ typedef struct
 	D3DXVECTOR3 DiffRot;					// 目的の角度を現在の角度との差
 	D3DXVECTOR3 MoveRot;					//回転量
 	ModelParts aModel[NUM_MODEL];			//モデルのパーツ数
+	PLAYERSTATE state;		//状態
+	int nCounterState;		//状態管理カウンター
 }Player;
 
 typedef struct
@@ -49,7 +67,6 @@ typedef struct
 	D3DXVECTOR3 pos;
 	D3DXVECTOR3 rot;
 }Key;
-
 
 //プロトタイプ宣言
 void InitPlayer(void);

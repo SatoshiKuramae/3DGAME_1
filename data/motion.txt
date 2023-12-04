@@ -35,7 +35,7 @@ MODEL_FILENAME = data/MODEL/L_foot.x	# [14]左足
 #------------------------------------------------------------------------------
 CHARACTERSET
 	NUM_PARTS = 15					# パーツ数
-	MOVE = 0.8						# 移動量
+	MOVE = 2.0						# 移動量
 	JUMP = 11.25					# ジャンプ量
 	RADIUS = 20.0					#半径
 	HEIGHT = 40.0					#高さ
