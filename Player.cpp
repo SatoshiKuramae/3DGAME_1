@@ -93,7 +93,6 @@ void InitPlayer(void)
 	g_nldxShadow = SetShadow();
 
 	LoadPlayer();
-
 	g_player.g_posplayer = D3DXVECTOR3(g_player.aModel[0].HEIGHT, g_player.aModel[0].HEIGHT, g_player.aModel[0].HEIGHT);
 
 	/*for (int nCnt = 0; nCnt < NUM_MODEL; nCnt++)
@@ -145,7 +144,11 @@ void UpdatePlayer(void)
 	Camera* pCamera = GetCamera();
 	//‰e‚ÌˆÊ’u‚ðÝ’è
 	SetPositionShadow(g_nldxShadow, g_player.g_posplayer);
-
+	g_player.aModel[0].pos.y -= 1.0f;
+	if (g_player.aModel[0].pos.y < 88.0f)
+	{
+		g_player.aModel[0].pos.y = 88.0f;
+	}
 #if TEST_player
 
 	if (GetKeyboardpress(DIK_SPACE) == true)
@@ -226,6 +229,7 @@ void UpdatePlayer(void)
 
 	if (GetKeyboardpress(DIK_W) == true)
 	{
+		g_player.state = PLAYERSTATE_MOVE;
 		bMove = true;
 		g_player.DestRot.y = pCamera->rot.y - D3DX_PI;
 		if (GetKeyboardpress(DIK_D) == true)
@@ -237,21 +241,33 @@ void UpdatePlayer(void)
 			g_player.DestRot.y = pCamera->rot.y + D3DX_PI * 0.75f;
 		}
 	}
-	else if (GetKeyboardpress(DIK_A) == true)
+	else if (GetKeyboardRelease(DIK_W) == true)
 	{
+		g_player.state = PLAYERSTATE_NEUTRAL;
+	}
+
+	if (GetKeyboardpress(DIK_A) == true)
+	{
+		g_player.state = PLAYERSTATE_MOVE;
 		bMove = true;
 		g_player.DestRot.y = pCamera->rot.y + D3DX_PI * 0.5f;
 		if (GetKeyboardpress(DIK_W) == true)
 		{
-			g_player.DestRot.y = pCamera->rot.y - D3DX_PI * 0.75f;
+			g_player.DestRot.y = pCamera->rot.y + D3DX_PI * 0.75f;
 		}
 		if (GetKeyboardpress(DIK_S) == true)
 		{
 			g_player.DestRot.y = pCamera->rot.y + D3DX_PI * 0.25f;
 		}
 	}
-	else if (GetKeyboardpress(DIK_S) == true)
+	else if (GetKeyboardRelease(DIK_A) == true)
 	{
+		g_player.state = PLAYERSTATE_NEUTRAL;
+	}
+
+	if (GetKeyboardpress(DIK_S) == true)
+	{
+		g_player.state = PLAYERSTATE_MOVE;
 		bMove = true;
 		g_player.DestRot.y = pCamera->rot.y;
 		if (GetKeyboardpress(DIK_D) == true)
@@ -263,8 +279,14 @@ void UpdatePlayer(void)
 			g_player.DestRot.y = pCamera->rot.y + D3DX_PI * 0.25f;
 		}
 	}
-	else if (GetKeyboardpress(DIK_D) == true)
+	else if (GetKeyboardRelease(DIK_S) == true)
 	{
+		g_player.state = PLAYERSTATE_NEUTRAL;
+	}
+
+	if (GetKeyboardpress(DIK_D) == true)
+	{
+		g_player.state = PLAYERSTATE_MOVE;
 		bMove = true;
 		g_player.DestRot.y = pCamera->rot.y - D3DX_PI * 0.5f;
 		if (GetKeyboardpress(DIK_W) == true)
@@ -273,14 +295,19 @@ void UpdatePlayer(void)
 		}
 		if (GetKeyboardpress(DIK_S) == true)
 		{
-			g_player.DestRot.y = pCamera->rot.y + D3DX_PI * 0.25f;
+			g_player.DestRot.y = pCamera->rot.y - D3DX_PI * 0.25f;
 		}
 	}
-
-	if (GetKeyboardTrigger(DIK_SPACE) == true)
+	else if (GetKeyboardRelease(DIK_D) == true)
 	{
-
+		g_player.state = PLAYERSTATE_NEUTRAL;
 	}
+
+	if (GetKeyboardpress(DIK_SPACE) == true)
+	{//ƒWƒƒƒ“ƒv
+		g_player.aModel[0].pos.y +=10.0f;
+	}
+
 	if (GetKeyboardpress(DIK_M) == true)
 	{
 		g_player.aModel[3].rot.y = 1.5f;
@@ -505,10 +532,6 @@ void LoadPlayer(void)
 				}
 				else if (!strcmp(aDataSearch, "MOVE"))
 				{
-					/*fscanf(pFile, "%s %f",
-						&aSymbol[0],
-						&g_player.aModel[nCnt].MOVE);*/
-
 					fscanf(pFile, "%s",
 						&aSymbol[0]
 						);

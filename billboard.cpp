@@ -2,6 +2,7 @@
 #include "Billboard.h"
 #include "shadow.h"
 #define NUM_Billboard (1)
+
 //グローバル変数
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffBillboard = NULL;		//頂点バッファへのポインタ
 LPDIRECT3DTEXTURE9 g_pTextureBillboard = NULL;

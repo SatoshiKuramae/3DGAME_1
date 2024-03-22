@@ -419,7 +419,7 @@ void DrawFPS(void)
 	Player* pPlayer = GetPlayer();
 	Camera* pCamera = GetCamera();
 	//文字列に代入
-	snprintf(&aStr[0][0], 256, "FPS:%d\n視点の移動　Z、C\nプレイヤーの向き:%.2f,%.2f,%.2f\n目的の向き:%.2f\n視点の角度:%.2f", g_nCountFPS, pPlayer->g_rotplayer.x, ((pPlayer->g_rotplayer.y) / D3DX_PI), pPlayer->g_rotplayer.z, pPlayer->DestRot.y, pCamera->rot.y);
+	snprintf(&aStr[0][0], 256, "FPS:%d\n視点の移動　Z、C\nプレイヤーの向き:%.2f,%.2f,%.2f\n目的の向き:%.2f\n視点の角度:%.2f\nプレイヤーの動き:%d", g_nCountFPS, pPlayer->g_rotplayer.x, ((pPlayer->g_rotplayer.y) / D3DX_PI), pPlayer->g_rotplayer.z, pPlayer->DestRot.y, pCamera->rot.y,pPlayer->state);
 
 
 	//テキストの描画
