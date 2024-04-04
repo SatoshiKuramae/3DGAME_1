@@ -105,6 +105,7 @@ void UpdateCamera(void)
 		g_PosV_z += 1.0f;
 		g_PosV_y -= 1.0f;
 	}
+
 	if (GetKeyboardpress(DIK_E) == true)
 	{
 		g_camera.posV.z -= 1.0f;
@@ -117,11 +118,13 @@ void UpdateCamera(void)
 		g_camera.posV.z += CAMERASPEED;
 		g_camera.posR.z += CAMERASPEED;
 	}
+
 	if (GetKeyboardpress(DIK_DOWN) == true)
 	{
 		g_camera.posV.z -= CAMERASPEED;
 		g_camera.posR.z -= CAMERASPEED;
 	}
+
 	if (GetKeyboardpress(DIK_RIGHT) == true)
 	{
 		g_camera.posV.x += CAMERASPEED;
@@ -132,17 +135,7 @@ void UpdateCamera(void)
 		g_camera.posV.x -= CAMERASPEED;
 		g_camera.posR.x -= CAMERASPEED;
 	}
-	if (GetKeyboardTrigger(DIK_O) == true)
-	{
-		if (g_camera.flattery == true)
-		{
-			g_camera.flattery = false;
-		}
-		else if (g_camera.flattery == false)
-		{
-			g_camera.flattery = true;
-		}
-	}
+	
 	if (g_camera.flattery == true)
 	{
 		g_camera.posR = pPlayer->g_posplayer;

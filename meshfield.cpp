@@ -1,6 +1,16 @@
 #include "main.h"
 #include "meshfield.h"
-#define NUM_MESH (9)
+#define X_LENGTH (500.0f)
+#define Z_LENGTH (500.0f)
+#define X_HALF_LENGTH (X_LENGTH*0.5)
+#define Z_HALF_LENGTH (Z_LENGTH*0.5)
+#define SPLIT_X (3)
+#define SPLIT_Z (3)
+#define NUM_MESH (SPLIT_X*SPLIT_Z)
+#define MAX_INDEX (NUM_MESH * 2 + 4  * (SPLIT_Z - 1))
+#define MAX_PLIMITIB (MAX_INDEX - 2)
+
+
 //メッシュフィールドのテクスチャ
 LPDIRECT3DTEXTURE9 g_pTextureMeshField = NULL;
 //頂点バッファへのポインタ
@@ -14,22 +24,25 @@ D3DXVECTOR3 g_rotMeshField;
 //メッシュフィールドのワールドマトリックス
 D3DXMATRIX g_mtxWorldMeshField;
 
+
 //初期化処理
 void Initmeshfield(void)
 {
-
+	//メッシュフィールドの位置
 	g_posMeshField = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	g_rotMeshField = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) *  NUM_MESH, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, &g_pVtxBuffMeshField, NULL);
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) *  NUM_MESH, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, 
+		D3DPOOL_MANAGED, &g_pVtxBuffMeshField, NULL);
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice, "data\\texture\\field.png", &g_pTextureMeshField);
+
 	//インデックスバッファの生成
-	pDevice->CreateIndexBuffer(sizeof(WORD) * 14,
+	pDevice->CreateIndexBuffer(sizeof(WORD) * MAX_INDEX,
 		D3DUSAGE_WRITEONLY,
 		D3DFMT_INDEX16,
 		D3DPOOL_MANAGED,
@@ -50,15 +63,28 @@ void Initmeshfield(void)
 	
 
 	//頂点情報の設定
-	pVtx[0].pos = (D3DXVECTOR3(-50.0f, 10.0f, 50.0f));
-	pVtx[1].pos = (D3DXVECTOR3(0.0f, 10.0f, 50.0f));
-	pVtx[2].pos = (D3DXVECTOR3(50.0f, 10.0f, 50.0f));
-	pVtx[3].pos = (D3DXVECTOR3(-50.0f, 10.0f, 0.0f));
-	pVtx[4].pos = (D3DXVECTOR3(0.0f, 10.0f, 0.0f));
-	pVtx[5].pos = (D3DXVECTOR3(50.0f, 10.0f, 0.0f));
-	pVtx[6].pos = (D3DXVECTOR3(-50.0f, 10.0f, -50.0f));
-	pVtx[7].pos = (D3DXVECTOR3(0.0f, 10.0f, -50.0f));
-	pVtx[8].pos = (D3DXVECTOR3(50.0f, 10.0f, -50.0f));
+
+	for (int Zposcount = 0; Zposcount < SPLIT_Z ; Zposcount++)
+	{
+		for (int Xposcount = 0; Xposcount < SPLIT_X; Xposcount++)
+		{
+			pVtx[Xposcount + (Zposcount * SPLIT_X)].pos =
+				D3DXVECTOR3
+				(X_LENGTH * ((float)Xposcount / (SPLIT_X - 1)) - X_HALF_LENGTH,
+				10.0f,
+				-Z_LENGTH * ((float)Zposcount / (SPLIT_Z - 1)) + Z_HALF_LENGTH);
+		}
+	}
+
+	//pVtx[0].pos = (D3DXVECTOR3(-50.0f, 10.0f, 50.0f));
+	//pVtx[1].pos = (D3DXVECTOR3(0.0f, 10.0f, 50.0f));
+	//pVtx[2].pos = (D3DXVECTOR3(50.0f, 10.0f, 50.0f));
+	//pVtx[3].pos = (D3DXVECTOR3(-50.0f, 10.0f, 0.0f));
+	//pVtx[4].pos = (D3DXVECTOR3(0.0f, 10.0f, 0.0f));
+	//pVtx[5].pos = (D3DXVECTOR3(50.0f, 10.0f, 0.0f));
+	//pVtx[6].pos = (D3DXVECTOR3(-50.0f, 10.0f, -50.0f));
+	//pVtx[7].pos = (D3DXVECTOR3(0.0f, 10.0f, -50.0f));
+	//pVtx[8].pos = (D3DXVECTOR3(50.0f, 10.0f, -50.0f));
 
 	pVtx[0].tex = (D3DXVECTOR2(0.0f, 0.0f));
 	pVtx[1].tex = (D3DXVECTOR2(0.5f, 0.0f));
@@ -87,6 +113,14 @@ void Initmeshfield(void)
 	}
 
 	//インデックスの設定
+
+	/*for (int Z_indexcount = 0; Z_indexcount < SPLIT_Z + 1; Z_indexcount++)
+	{
+		for (int X_indexcountscount = 0; X_indexcountscount < SPLIT_X; X_indexcountscount++)
+		{
+
+		}
+	}*/
 	pldx[0] = 3;
 	pldx[1] = 0;
 	pldx[2] = 4;
@@ -102,6 +136,7 @@ void Initmeshfield(void)
 	pldx[12] = 8;
 	pldx[13] = 5;
 
+	//バッファをアンロック
 	g_pIdxBuffMeshField->Unlock();
 
 	//頂点バッファをアンロック
@@ -173,6 +208,6 @@ void Drawmeshfield(void)
 	pDevice->SetTexture(0, g_pTextureMeshField);
 
 	//ポリゴンの描画
-	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, 9, 0, 12);
 
+	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, NUM_MESH, 0, MAX_PLIMITIB);
 }

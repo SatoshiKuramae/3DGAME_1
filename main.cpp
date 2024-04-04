@@ -305,6 +305,7 @@ void Update(void)
 	UpdateField();
 	UpdateCamera();
 	UpdateKeyboard();
+
 	if (GetKeyboardTrigger(DIK_F1) == true)
 	{
 		if (meshuse == false)
