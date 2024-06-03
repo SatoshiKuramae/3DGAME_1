@@ -1,14 +1,18 @@
 #include "main.h"
 #include "meshfield.h"
-#define X_LENGTH (500.0f)
-#define Z_LENGTH (500.0f)
-#define X_HALF_LENGTH (X_LENGTH*0.5)
-#define Z_HALF_LENGTH (Z_LENGTH*0.5)
-#define SPLIT_X (3)
-#define SPLIT_Z (3)
-#define NUM_MESH (SPLIT_X*SPLIT_Z)
-#define MAX_INDEX (NUM_MESH * 2 + 4  * (SPLIT_Z - 1))
-#define MAX_PLIMITIB (MAX_INDEX - 2)
+#define X_LENGTH (500.0f)	//X方向の長さ
+#define Z_LENGTH (500.0f)	//Z方向の長さ
+#define X_HALF_LENGTH (X_LENGTH*0.5)	//X方向半分の長さ
+#define Z_HALF_LENGTH (Z_LENGTH*0.5)	//Z方向半分の長さ
+#define SPLIT_X (3)		//Xの分割数
+#define SPLIT_Z (3)		//Zの分割数
+#define NUM_MESH (SPLIT_X*SPLIT_Z)	//メッシュの合計数
+#define MAX_INDEX (NUM_MESH * 2 + 4  * (SPLIT_Z - 1))	//インデックスの総数
+#define MAX_PLIMITIB (MAX_INDEX - 2)		//プリミティブの最大数
+#define X_BLOCK	(SPLIT_X+1)		//Ｘ方向のブロックの総数
+#define Z_BLOCK	(SPLIT_Z+1)		//Z方向のブロックの総数
+
+
 
 
 //メッシュフィールドのテクスチャ
@@ -76,16 +80,6 @@ void Initmeshfield(void)
 		}
 	}
 
-	//pVtx[0].pos = (D3DXVECTOR3(-50.0f, 10.0f, 50.0f));
-	//pVtx[1].pos = (D3DXVECTOR3(0.0f, 10.0f, 50.0f));
-	//pVtx[2].pos = (D3DXVECTOR3(50.0f, 10.0f, 50.0f));
-	//pVtx[3].pos = (D3DXVECTOR3(-50.0f, 10.0f, 0.0f));
-	//pVtx[4].pos = (D3DXVECTOR3(0.0f, 10.0f, 0.0f));
-	//pVtx[5].pos = (D3DXVECTOR3(50.0f, 10.0f, 0.0f));
-	//pVtx[6].pos = (D3DXVECTOR3(-50.0f, 10.0f, -50.0f));
-	//pVtx[7].pos = (D3DXVECTOR3(0.0f, 10.0f, -50.0f));
-	//pVtx[8].pos = (D3DXVECTOR3(50.0f, 10.0f, -50.0f));
-
 	pVtx[0].tex = (D3DXVECTOR2(0.0f, 0.0f));
 	pVtx[1].tex = (D3DXVECTOR2(0.5f, 0.0f));
 	pVtx[2].tex = (D3DXVECTOR2(1.0f, 0.0f));
@@ -114,14 +108,19 @@ void Initmeshfield(void)
 
 	//インデックスの設定
 
-	/*for (int Z_indexcount = 0; Z_indexcount < SPLIT_Z + 1; Z_indexcount++)
+	int Xindx = 0;
+	int Zindx = 0;
+
+	for (int Z_indexcount = 0; Z_indexcount < SPLIT_Z + 1; Z_indexcount++)
 	{
 		for (int X_indexcountscount = 0; X_indexcountscount < SPLIT_X; X_indexcountscount++)
 		{
-
+			pldx[X_indexcountscount] = (3 * X_indexcountscount) + X_indexcountscount;
+			pldx[X_indexcountscount] = 5 + X_indexcountscount;
 		}
-	}*/
-	pldx[0] = 3;
+	}
+
+	/*pldx[0] = 3;
 	pldx[1] = 0;
 	pldx[2] = 4;
 	pldx[3] = 1;
@@ -134,7 +133,7 @@ void Initmeshfield(void)
 	pldx[10] = 7;
 	pldx[11] = 4;
 	pldx[12] = 8;
-	pldx[13] = 5;
+	pldx[13] = 5;*/
 
 	//バッファをアンロック
 	g_pIdxBuffMeshField->Unlock();

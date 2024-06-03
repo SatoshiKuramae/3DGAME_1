@@ -144,7 +144,8 @@ void UpdatePlayer(void)
 	Camera* pCamera = GetCamera();
 	//‰e‚ÌˆÊ’u‚ğİ’è
 	SetPositionShadow(g_nldxShadow, g_player.g_posplayer);
-	g_player.aModel[0].pos.y -= 1.0f;
+	
+
 	if (g_player.aModel[0].pos.y < 88.0f)
 	{
 		g_player.aModel[0].pos.y = 88.0f;
@@ -222,10 +223,10 @@ void UpdatePlayer(void)
 
 	bool bMove = false;	// “®‚­‚©”Û‚©
 
-	if (GetKeyboardpress(DIK_SPACE) == true)
+	/*if (GetKeyboardpress(DIK_SPACE) == true)
 	{
 		SetBullet(g_player.g_posplayer, g_player.g_rotplayer, 5);
-	}
+	}*/
 
 	if (GetKeyboardpress(DIK_W) == true)
 	{
@@ -381,6 +382,8 @@ void UpdatePlayer(void)
 	}
 
 #endif
+
+	g_player.aModel[0].pos.y -= 2.0f;
 
 	//‘O‚ÌˆÊ’u‚ğ•Û‘¶
 	g_player.g_oldposplayer = g_player.g_posplayer;

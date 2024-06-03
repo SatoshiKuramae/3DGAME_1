@@ -141,6 +141,7 @@ void UpdateCamera(void)
 		g_camera.posR = pPlayer->g_posplayer;
 		g_camera.posV.x = sinf(g_camera.rot.y + D3DX_PI) * sqrtf(g_PosV_z * g_PosV_z + g_PosV_y * g_PosV_y) / 2 + pPlayer->g_posplayer.x;
 		g_camera.posV.z = cosf(g_camera.rot.y + D3DX_PI) * sqrtf(g_PosV_z * g_PosV_z + g_PosV_y * g_PosV_y) / 2 + pPlayer->g_posplayer.z;
+		
 	}
 }
 
